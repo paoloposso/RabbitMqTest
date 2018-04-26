@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Model;
 using Newtonsoft.Json;
+using Mq;
 
 namespace Send
 {
@@ -45,34 +46,10 @@ namespace Send
                 }
             );
 
-            Program.EnviarMensagemParaFilaMq(msg);
+            Fila.EnviarMensagem(msg);
         }
 
-        private static void EnviarMensagemParaFilaMq(string message)
-        {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            
-            using(var connection = factory.CreateConnection())
-            using(var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queue: "navigationData",
-                                    durable: false,
-                                    exclusive: false,
-                                    autoDelete: false,
-                                    arguments: null);
-
-                var body = Encoding.UTF8.GetBytes(message);
-
-                channel.BasicPublish(exchange: "",
-                                    routingKey: "navigationData",
-                                    basicProperties: null,
-                                    body: body);
-
-                Console.WriteLine(" [x] Sent {0}", message);
-            }
-            Console.ReadLine();
-        }
-
+        //método que lê dados da página especificada para enviar para a fila
         private static async void ObterDadosPaginaAsync()
         {
             //página que exibe o preço atual da criptomoeda da plataforma ethereum

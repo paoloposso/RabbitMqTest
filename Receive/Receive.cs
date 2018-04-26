@@ -28,7 +28,7 @@ class Receive
                 var body = ea.Body;
                 var message = Encoding.UTF8.GetString(body);
 
-                Console.WriteLine(" [x] Received {0}", message);
+                Console.WriteLine(" [x] Lido {0}", message);
 
                 try
                 {
@@ -44,7 +44,7 @@ class Receive
                                  autoAck: true,
                                  consumer: consumer);
 
-            Console.WriteLine(" Press [enter] to exit.");
+            Console.WriteLine(" Aperte [enter] para sair.");
             Console.ReadLine();
         }
     }
